@@ -7,7 +7,32 @@
 
   <body>
     <div id="app"></div>
+const canvas = document.createElement("canvas");
+canvas.width = canvas.height = 256;
+const ctx = canvas.getContext("2d");
+const tileSize = 32;
 
+for (let row = 0; row < 8; row++) {
+  for (let col = 0; col < 8; col++) {
+    ctx.fillStyle = (row + col) % 2 === 0 ? "#eeeeee" : "#333333";
+    ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+  }
+}
+
+const texture = new THREE.CanvasTexture(canvas);
+texture.colorSpace = THREE.SRGBColorSpace;
+texture.magFilter = THREE.NearestFilter;
+texture.minFilter = THREE.NearestFilter;
+
+const floor = new THREE.Mesh(
+  geometry,
+  new THREE.MeshStandardMaterial({ map: texture, side: THREE.DoubleSide })
+);
+
+// ShapeGeometry lies in XY; rotate it to make a horizontal XZ floor.
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = 0;
+scene.add(floor);
     <script src="./index.mjs" type="module"></script>
   </body>
 </html>
