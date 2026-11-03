@@ -1,12 +1,11 @@
-import "./styles.css";
-// Assumes THREE is available, and scene is your THREE.Scene.
-import * as THREE from "three";
-
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x202633);
 
 const camera = new THREE.PerspectiveCamera(
-  55, window.innerWidth / window.innerHeight, 0.1, 100
+  55,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  100
 );
 camera.position.set(8, 7, 10);
 camera.lookAt(0, 1.5, 0);
@@ -41,12 +40,14 @@ for (let i = 0; i < sides; i++) {
 
 const roomShape = new THREE.Shape();
 roomShape.moveTo(vertices[0].x, vertices[0].y);
+
 for (let i = 1; i < vertices.length; i++) {
   roomShape.lineTo(vertices[i].x, vertices[i].y);
 }
+
 roomShape.closePath();
 
-// Checkerboard floor texture
+// Create the checkerboard texture
 const pixelsPerTile = 64;
 const checkerCanvas = document.createElement("canvas");
 checkerCanvas.width = checkerCanvas.height = pixelsPerTile * 2;
@@ -56,17 +57,21 @@ for (let y = 0; y < 2; y++) {
   for (let x = 0; x < 2; x++) {
     ctx.fillStyle = (x + y) % 2 === 0 ? "#eeeeee" : "#30343b";
     ctx.fillRect(
-      x * pixelsPerTile, y * pixelsPerTile,
-      pixelsPerTile, pixelsPerTile
+      x * pixelsPerTile,
+      y * pixelsPerTile,
+      pixelsPerTile,
+      pixelsPerTile
     );
   }
 }
 
 const checkerTexture = new THREE.CanvasTexture(checkerCanvas);
 checkerTexture.colorSpace = THREE.SRGBColorSpace;
-checkerTexture.wrapS = checkerTexture.wrapT = THREE.RepeatWrapping;
+checkerTexture.wrapS = THREE.RepeatWrapping;
+checkerTexture.wrapT = THREE.RepeatWrapping;
 checkerTexture.repeat.set(0.5, 0.5);
 
+// Map the floor texture in room-space units
 const floorGeometry = new THREE.ShapeGeometry(roomShape);
 const positions = floorGeometry.attributes.position;
 const uvs = [];
@@ -74,7 +79,11 @@ const uvs = [];
 for (let i = 0; i < positions.count; i++) {
   uvs.push(positions.getX(i) / 2, positions.getY(i) / 2);
 }
-floorGeometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+
+floorGeometry.setAttribute(
+  "uv",
+  new THREE.Float32BufferAttribute(uvs, 2)
+);
 
 const floor = new THREE.Mesh(
   floorGeometry,
@@ -84,11 +93,12 @@ const floor = new THREE.Mesh(
     side: THREE.DoubleSide
   })
 );
+
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
 
-// Walls around the polygon
+// Add a wall along each polygon edge
 const wallMaterial = new THREE.MeshStandardMaterial({
   color: 0xc5d4e8,
   roughness: 0.85,
@@ -98,6 +108,7 @@ const wallMaterial = new THREE.MeshStandardMaterial({
 for (let i = 0; i < vertices.length; i++) {
   const a = vertices[i];
   const b = vertices[(i + 1) % vertices.length];
+
   const dx = b.x - a.x;
   const dz = b.y - a.y;
   const length = Math.hypot(dx, dz);
@@ -124,6 +135,7 @@ function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
+
 animate();
 
 window.addEventListener("resize", () => {
