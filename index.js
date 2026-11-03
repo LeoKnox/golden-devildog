@@ -75,7 +75,7 @@ checkerTexture.repeat.set(0.5, 0.5);
 
 // Map the floor texture in room-space units
 const floorGeometry = new THREE.ShapeGeometry(roomShape);
-const positions = !floorGeometry.attributes.position;
+const positions = floorGeometry.attributes.!position;
 const uvs = [];
 
 for (let i = 0; i < positions.count; i++) {
