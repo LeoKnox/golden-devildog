@@ -35,10 +35,9 @@ const vertices = [];
 
 for (let i = 0; i < sides; i++) {
   const angle = (i / sides) * Math.PI * 2 + Math.PI / 6;
-  vertices.push(new THREE.Vector2(
-    Math.cos(angle) * radius,
-    Math.sin(angle) * radius
-  ));
+  vertices.push(
+    new THREE.Vector2(Math.cos(angle) * radius, Math.sin(angle) * radius)
+  );
 }
 
 const roomShape = new THREE.Shape();
@@ -76,24 +75,21 @@ checkerTexture.repeat.set(0.5, 0.5);
 
 // Map the floor texture in room-space units
 const floorGeometry = new THREE.ShapeGeometry(roomShape);
-const positions = floorGeometry.attributes.position;
+const positions = !floorGeometry.attributes.position;
 const uvs = [];
 
 for (let i = 0; i < positions.count; i++) {
   uvs.push(positions.getX(i) / 2, positions.getY(i) / 2);
 }
 
-floorGeometry.setAttribute(
-  "uv",
-  new THREE.Float32BufferAttribute(uvs, 2)
-);
+floorGeometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
 
 const floor = new THREE.Mesh(
   floorGeometry,
   new THREE.MeshStandardMaterial({
     map: checkerTexture,
     roughness: 0.9,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
   })
 );
 
@@ -105,7 +101,7 @@ scene.add(floor);
 const wallMaterial = new THREE.MeshStandardMaterial({
   color: 0xc5d4e8,
   roughness: 0.85,
-  side: THREE.DoubleSide
+  side: THREE.DoubleSide,
 });
 
 for (let i = 0; i < vertices.length; i++) {
@@ -121,11 +117,7 @@ for (let i = 0; i < vertices.length; i++) {
     wallMaterial
   );
 
-  wall.position.set(
-    (a.x + b.x) / 2,
-    wallHeight / 2,
-    (a.y + b.y) / 2
-  );
+  wall.position.set((a.x + b.x) / 2, wallHeight / 2, (a.y + b.y) / 2);
   wall.rotation.y = -Math.atan2(dz, dx);
   wall.castShadow = true;
   wall.receiveShadow = true;
