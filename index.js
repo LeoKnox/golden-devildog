@@ -1,3 +1,6 @@
+import "./styles.css";
+// Assumes THREE is available, and scene is your THREE.Scene.
+import * as THREE from "three";
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x202633);
 
