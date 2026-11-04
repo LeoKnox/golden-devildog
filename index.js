@@ -21,7 +21,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 app.appendChild(renderer.domElement);
 
 // Create a regular n-sided polygon
-const n = 7;
+const n = 5;
 const radius = 2;
 const shape = new THREE.Shape();
 
