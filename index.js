@@ -25,3 +25,4 @@ const material = new THREE.MeshBasicMaterial({
 
 const polygon = new THREE.Mesh(geometry, material);
 scene.add(polygon);
+return polygon;
