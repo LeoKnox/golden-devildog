@@ -1,4 +1,4 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import * as THREE from "three";
 
 const app = document.querySelector("#app");
 
@@ -39,7 +39,7 @@ shape.closePath();
 const geometry = new THREE.ShapeGeometry(shape);
 const material = new THREE.MeshBasicMaterial({
   color: 0x44aa88,
-  side: THREE.DoubleSide
+  side: THREE.DoubleSide,
 });
 
 const polygon = new THREE.Mesh(geometry, material);
